@@ -4,10 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.19.0/dist/editor.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mdgaziur/EditorJS-LaTeX@latest/dist/editorjs-latex.bundle-min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdgaziur/EditorJS-LaTeX@latest/dist/editorjs-latex.bundle.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css"></link>
 </head>
 <body>
+    <p>每年交多少钱：<input value="30000" name="every"></p>
+    <!-- <p>总共交几年：<input value="5" name="total"></p> -->
+    <!-- <p>多少年后领：<input value="18" name="age"></p> -->
+    <p>年利息(%)：<input value="2" name="low"></p>
+    <p><button>计算</button></p>
+    <div id="editorjs"></div>
     <script>
-        alert(1)
+        dd();
+
+        document.querySelector('button').addEventListener('click', dd)
+
+
+        
+
+        function dd() {
+            document.querySelector('#editorjs').innerHTML = '';
+            const every = document.querySelector('[name=every]').value;
+            const low = document.querySelector('[name=low]').value;
+
+            function bb(every, price) {
+                let val = 0;
+                for(let i = 18; i > 13; i--) {
+                    val += every * Math.pow(1 + price, i)
+                }
+                return val.toFixed(2);
+            }
+
+            function buildTax(total, low) {
+                return `${total}\\times (1+  ${low})^{18} + ${total}\\times (1+  ${low})^{17} + ${total}\\times (1+  ${low})^{16} + ${total}\\times (1+  ${low})^{15} + ${total}\\times (1+  ${low})^{14} = ${bb(every, low)}`
+            }
+
+            function cc() {
+                const editor = new EditorJS({
+                    holder: "editorjs",
+                    tools: {
+                            Math: {
+                            class: EJLaTeX,
+                            shortcut: 'CMD+SHIFT+M',
+                        }
+                    },
+                    data: {
+                        "time":1602919875295,
+                        "blocks":[
+                            {
+                                "type":"Math",
+                                "data":{
+                                    "math":buildTax(every, low/100)
+                                }
+                            }
+                        ],
+                        "version":"2.19.0"
+                    }
+                });
+            }
+            cc();
+        }
     </script>
 </body>
 </html>
