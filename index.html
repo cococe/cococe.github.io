@@ -29,16 +29,16 @@
             const every = document.querySelector('[name=every]').value;
             const low = document.querySelector('[name=low]').value;
 
-            function bb(every, price) {
+            function bb(every, l) {
                 let val = 0;
                 for(let i = 18; i > 13; i--) {
-                    val += every * Math.pow(1 + price, i)
+                    val += every * Math.pow(1 + l, i)
                 }
-                return val.toFixed(2);
+                return Math.ceil(val);
             }
 
             function buildTax(total, low) {
-                return `${total}\\times (1+  ${low})^{18} + ${total}\\times (1+  ${low})^{17} + ${total}\\times (1+  ${low})^{16} + ${total}\\times (1+  ${low})^{15} + ${total}\\times (1+  ${low})^{14} = ${bb(every, low)}`
+                return `${total}\\times (1+  ${low}\\%)^{18} + ${total}\\times (1+  ${low}\\%)^{17} + ${total}\\times (1+  ${low}\\%)^{16} + ${total}\\times (1+  ${low}\\%)^{15} + ${total}\\times (1+  ${low}\\%)^{14} = ${bb(every, low/100)}`
             }
 
             function cc() {
@@ -56,7 +56,7 @@
                             {
                                 "type":"Math",
                                 "data":{
-                                    "math":buildTax(every, low/100)
+                                    "math":buildTax(every, low)
                                 }
                             }
                         ],
